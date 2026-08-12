@@ -1,0 +1,27 @@
+PROJECT TYPE: Framework Migration Bridge (standalone frontend module)
+
+BUILD COMMANDS
+==============
+npm install
+npx ng build     # real Angular build, verified passing (Angular 22)
+npx ng test --watch=false --browsers=ChromeHeadless   # real karma test suite, verified passing
+
+ARCHITECTURE
+============
+This is the LEGACY app in the Migration Bridge, standalone - a
+genuine multi-component app (widget list + migration-status panel +
+a real service layer), not a single bare component. In the connected
+repo it's served at /legacy by the route-split backend, alongside
+the new React app at /app. Fetches /api/widgets,
+/api/migration/status, /api/migration/routes from
+TD_Migrationbridge_BE_nodejs.
+
+  src/app/lib/widgets.ts                 pure widget logic
+  src/app/lib/migration.ts               pure migration-progress formatting logic
+  src/app/services/widget.service.ts      real HttpClient service (widgets + migration data)
+  src/app/components/widget-list.component.ts
+  src/app/components/migration-status.component.ts
+  src/app/app.component.ts                composes the above
+  quality/                                21 real TypeScript code-quality tool fixtures
+
+Branches: migrationbridge_angularjs<16|17|18|19>
